@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="5dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".View3">
+
+
+    <EditText
+        android:id="@+id/editFilter"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/edit_text_border"
+        android:ems="10"
+        android:hint="Tags only"
+        android:includeFontPadding="true"
+        android:paddingLeft="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayoutA"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editFilter"
+        tools:ignore="MissingConstraints,UselessParent">
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="9dp"
+            android:fillViewport="true"
+            android:isScrollContainer="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton_backButtonPressed">
+
+            <ListView
+                android:id="@+id/notesListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:divider="#F3F1F1"
+                android:dividerHeight="30dp" />
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutB"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints,UselessParent">
+
+        <!--    Buttons-->
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnBackup"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
+            android:background="#3F74E0"
+            android:text="Backup"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="0dp"
+            android:height="0dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnNewNote"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
+            android:background="#06B326"
+            android:text="New"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="0dp"
+            android:height="0dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnRestore"
+            android:layout_width="125dp"
+            android:layout_height="match_parent"
+            android:background="#3F74E0"
+            android:text="Restore"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:ignore="MissingConstraints" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

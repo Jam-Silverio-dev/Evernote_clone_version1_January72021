@@ -1,0 +1,18 @@
+eclnotes schema
+
+table_name = "notesInfo"
+
+timestamp (TIMESTAMP/TEXT) | topic (TEXT) | info (TEXT) | tags (TEXT)
+
+Note: "NOT NULL" is optional for all of these except "id" column.
+
+
+SQL Code:
+
+>CREATE TABLE IF NOT EXISTS notesInfo (tags TEXT, timestamp TEXT, topic TEXT, info TEXT);
+
+>INSERT INTO notesInfo (tags, timestamp, topic, info) VALUES ('category1', 'timestamp1', 'topic1', 'info1');
+INSERT INTO notesInfo (tags, timestamp, topic, info) VALUES ('category2', 'timestamp2', 'topic2', 'info2');
+INSERT INTO notesInfo (tags, timestamp, topic, info) VALUES ('category3', 'timestamp3', 'topic3', 'info3');
+
+>UPDATE notesInfo SET tags = value1, timestamp = value2 topic = value1, info = value2 WHERE [condition];
