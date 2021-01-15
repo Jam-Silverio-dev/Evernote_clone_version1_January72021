@@ -1,0 +1,37 @@
+eclnotes schema
+
+table_name = "notesInfo"
+
+id (INTEGER PRIMARY KEY) | timestamp (TIMESTAMP/TEXT) | topic (TEXT) | info (TEXT) | tags (TEXT)
+
+Note: "NOT NULL" is optional for all of these except "id" column.
+
+
+SQL Code:
+
+Schema:
+>CREATE TABLE IF NOT EXISTS notesInfo (tags TEXT, timestamp TEXT PRIMARY KEY, topic TEXT, info TEXT); #1 IMPORTANT
+
+#INSERT RECORD
+>INSERT INTO notesInfo (tags, timestamp, topic, info) VALUES ('category1', 'timestamp1', 'topic1', 'info1');
+INSERT INTO notesInfo (tags, timestamp, topic, info) VALUES ('category2', 'timestamp2', 'topic2', 'info2');
+INSERT INTO notesInfo (tags, timestamp, topic, info) VALUES ('category3', 'timestamp3', 'topic3', 'info3');
+
+#UPDATE RECORD 
+>UPDATE notesInfo SET tags = 'mycategory1', topic = 'mytopic1', info = 'myinfo1' WHERE timestamp = 'timestamp1'; #2
+UPDATE notesInfo SET tags = 'mycategory2', topic = 'mytopic2', info = 'myinfo2' WHERE timestamp = 'timestamp2';
+UPDATE notesInfo SET tags = 'mycategory3', topic = 'mytopic3', info = 'myinfo3' WHERE timestamp = 'timestamp3';
+
+
+#DELETE RECORD
+>DELETE FROM notesInfo WHERE timestamp = 'timestamp1';
+
+
+
+NOTE:
+-Important: Where clause is PRIMARY KEY.
+
+
+
+#DELETE TABLE
+>DROP TABLE notesInfo;

@@ -60,6 +60,7 @@ public class View5 extends AppCompatActivity {
         setTitle("Edit note");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
 
+        Log.i("Entering View5.java", "Entering View5.java");
         Log.i("arraySize", "arraySize is " + arraySize);
         Log.i("notePosition", "notePosition is " + notePosition);
 
@@ -108,12 +109,11 @@ public class View5 extends AppCompatActivity {
                 timestamp.add(c1.getString(timestampIndex));
                 topic.add(c1.getString(topicIndex));
                 info.add(c1.getString(infoIndex));
-                Log.i("notesInfoTableA1: ", tags.get(0) + " , " + timestamp.get(0) + " , " + topic.get(0) + " , " + info.get(0));
-
                 c1.moveToNext();
             }
             c1.close();
             db.close();
+            Log.i("notesInfoTableA1: ", tags.get(0) + " , " + timestamp.get(0) + " , " + topic.get(0) + " , " + info.get(0));
         } catch (Exception e) {
             //TODO
         }
@@ -121,9 +121,6 @@ public class View5 extends AppCompatActivity {
 
 
     void localClearC() {
-        editTextTags2.setText("");
-        editTextTopic2.setText("");
-        editTextInfo2.setText("");
         textTags2 = "";
         textTopic2 = "";
         textInfo2 = "";
@@ -142,7 +139,7 @@ public class View5 extends AppCompatActivity {
             textInfo2 = editTextInfo2.getText().toString();
 
             String q ="'";
-            String updateSql = "UPDATE notesInfo SET tags = " + textTags2 + ", " + "topic = " + textTopic2 + ", " + "info = " + textInfo2 + "WHERE timestamp =  " + q+timestamp.get(notePosition)+q;
+            String updateSql = "UPDATE notesInfo SET tags = " + q+textTags2+q + ", " + "topic = " + q+textTopic2+q + ", " + "info = " + q+textInfo2+q + "WHERE timestamp =  " + q+timestamp.get(notePosition)+q;//Timestamp is the primary key and the where clause
             db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + FILE_EXTENSION, MODE_PRIVATE, null);
             db.execSQL(updateSql);
             db.close();
@@ -158,44 +155,39 @@ public class View5 extends AppCompatActivity {
     }
 
     /*Fragment code*/
-    public void open(View view) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Are you sure, you wanted to delete this note?");
+    public void deleteNoteDialog(View view) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Confirm");
+        alertDialog.setMessage("Are you sure, you wanted to delete this note?");
 
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                Toast.makeText(View5.this, "You clicked yes button", Toast.LENGTH_LONG).show();
+                deleteNoteRecord();
+//                Toast.makeText(View5.this, "You clicked yes button", Toast.LENGTH_LONG).show();
+                Intent myIntent1 = new Intent(View5.this,
+                        View3.class);
+                startActivity(myIntent1);
+                localClearC();
+                myView3.clearNotePosition();
             }
         });
 
-        alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 finish();
             }
         });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
+        AlertDialog alert = alertDialog.create();
+        alert.show();
     }
 
     @SuppressLint("NonConstantResourceId")
     public void onClickMethod(View v) throws IOException {//Purpose: Independent method for button click. Needs android: onClick = "method"
 
         switch (v.getId()) {
-            case R.id.btnDeleteNote:
-                try {
-                    Intent myIntent1 = new Intent(View5.this,
-                            View3.class);
-                    startActivity(myIntent1);
-                    localClearC();
-                    myView3.clearNotePosition();
-                } catch (Exception e) {
-                    //TODO
-                }
-                break;
-
             case R.id.btnHome:
                 Intent myIntent2 = new Intent(View5.this,
                         View3.class);
@@ -209,10 +201,25 @@ public class View5 extends AppCompatActivity {
 
         }
 
-
-
-
     }
 
+    private void deleteNoteRecord() {
+
+        try {
+            String q ="'";
+//            String deleteSql = DELETE FROM notesInfo WHERE timestamp = 'timestamp1';
+            String deleteSql = "DELETE FROM notesInfo WHERE timestamp = " + q+timestamp.get(notePosition)+q;//Timestamp is the primary key and the where clause
+            db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + FILE_EXTENSION, MODE_PRIVATE, null);
+            db.execSQL(deleteSql);
+            db.close();
+            Log.i("deleteRecord(): ", "deleteRecord(): Successfully deleted the record!");
+            Toast.makeText(getApplicationContext(), "Successfully deleted the record!", Toast.LENGTH_SHORT).show();
+
+            Log.i("deleteRecord(): ", "Intent: GOING BACK TO View3.java -> HOME!");
+        } catch (Exception e3) {
+            Log.i("updateRecord(): ", "TODO");
+        }
+
+    }
 
 }

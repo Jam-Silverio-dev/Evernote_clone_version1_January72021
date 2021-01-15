@@ -117,7 +117,7 @@
             android:layout_width="125dp"
             android:layout_height="match_parent"
             android:background="#494242"
-            android:onClick="onClickMethod"
+            android:onClick="deleteNoteDialog"
             android:text="Delete"
             android:textAllCaps="false"
             android:textColor="@color/white"

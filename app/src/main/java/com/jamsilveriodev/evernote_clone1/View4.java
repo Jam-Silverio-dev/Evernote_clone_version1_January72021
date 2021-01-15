@@ -25,9 +25,13 @@ public class View4 extends AppCompatActivity {
     These are global variables
      */
     ArrayList<String> myTimestamp = new ArrayList<>();
-//    public ArrayList<String> getMyTimestamp() {
-//        return (ArrayList<String>) myTimestamp.clone();
-//    }
+    public ArrayList<String> getMyTimestamp() {
+        getDate();
+        return (ArrayList<String>) myTimestamp.clone();
+    }
+    public void clearMyTimestamp() {
+        myTimestamp.clear();
+    }
     SQLiteDatabase db;
     private static final String FILE_EXTENSION = ".db";
     public static final String appFolder = "com.jamsilveriodev.eclnotes";
@@ -58,6 +62,7 @@ public class View4 extends AppCompatActivity {
         setTitle("Create note");
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
 
+        Log.i("Entering View4.java", "Entering View4.java");
 
         textViewTimeStamp1 = findViewById(R.id.textViewTimeStamp1);
         editTextTags1 = findViewById(R.id.editTextTags1);
@@ -134,10 +139,7 @@ public class View4 extends AppCompatActivity {
 
     void localClearB() {
         myTimestamp.clear();
-        editTextTags1.setText("");
         timestamp = "";
-        editTextTopic1.setText("");
-        editTextInfo1.setText("");
         textTags1 = "";
         textTopic1 = "";
         textInfo1 = "";
