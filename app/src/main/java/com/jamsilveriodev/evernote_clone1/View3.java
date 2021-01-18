@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,17 +23,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class View3 extends AppCompatActivity {
     /*
     These are global variables
      */
-    Context ctx;
+    public static final String userID = "001";
     View4 myView4 = new View4();
     String timestamp;
     ListView notesListView;
@@ -43,6 +42,7 @@ public class View3 extends AppCompatActivity {
     public static ArrayList<String> notesInfoRecords = new ArrayList<>();
     public static ArrayList<Integer> notesCount = new ArrayList<>();
     public static ArrayList<Integer> notePosition = new ArrayList<>();
+    public static ArrayList<String> searchResults = new ArrayList<>();
 
 
     public ArrayList<Integer> getNotePosition() {
@@ -67,7 +67,7 @@ public class View3 extends AppCompatActivity {
     File sdcardPathFolder = new File(Environment.getExternalStorageDirectory(), sdcardPath);
     File sdcardBackupFolder = new File(Environment.getExternalStorageDirectory(), sdcardBackupPath);
     File sdcardRestoreFolder = new File(Environment.getExternalStorageDirectory(), sdcardRestorePath);
-    public String backupFile = "/" + "a_paradise_soft" + "/" + "backup" + "/" + appName + "/" + "eclnotesDB.db";
+    public String backupFile = "/" + "a_paradise_soft" + "/" + "backup" + "/" + appName + "/" + "eclnotesDB" + userID + ".db";
 
 
     /*
@@ -75,12 +75,14 @@ public class View3 extends AppCompatActivity {
     */
     private static final int REQUEST_CODE = 112;
 
-    EditText editFilter;
-    String filter;
+    EditText editSearch;
+    String mySearch;
 
     Button btnBackup;
     Button btnNewNote;
     Button btnRestore;
+    Button btnSearch;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,28 +93,53 @@ public class View3 extends AppCompatActivity {
 
         Log.i("Entering View3.java", "Entering View3.java");
 
-        editFilter = findViewById(R.id.editFilter);
-        filter = editFilter.getText().toString();
+        editSearch = findViewById(R.id.editSearch);
+        mySearch = editSearch.getText().toString().toLowerCase();
         btnBackup = findViewById(R.id.btnBackup);
         btnNewNote = findViewById(R.id.btnNewNote);
         btnRestore = findViewById(R.id.btnRestore);
+        btnSearch = findViewById(R.id.btnSearch);
 
         localClearA();
         notePosition.clear();
-        editFilter.requestFocus();
+        editSearch.requestFocus();
 
         createDBAndTableIfNotExists();
         readingTagsAndInfoTables();
         insertIntoNotesInfoRecords();
 
 
+        displayAllResults();
+//        editSearch.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                // Fires right as the text is being changed (even supplies the range of text)
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count,
+//                                          int after) {
+//                // Fires right before text is changing
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                // Fires right after the text has changed
+////                tvDisplay.setText(s.toString());
+//            }
+//        });
+
+        btnSearch.setOnClickListener(v -> {
+            displaySearchResults(mySearch);
+
+        });
+
+    }
+
+    private void displayAllResults() {
         notesListView = findViewById(R.id.notesListView);
         adapter = new ArrayAdapter<String>(this, R.layout.simplerow, notesInfoRecords);
-
-        //Add header per List Item
-//        View header = getLayoutInflater().inflate(R.layout.header, null);
-//        notesListView.addHeaderView(header);
-
         notesListView.setAdapter(adapter);
         notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -132,35 +159,54 @@ public class View3 extends AppCompatActivity {
 
             }
         });
+    }
 
-        btnBackup.setOnClickListener(v -> {
-            myView4.getMyTimestamp();
-            String getTimestamp = myView4.getMyTimestamp().get(0);
-            Log.i("getTimestamp", "getTimestamp is "+ getTimestamp);
-            timestamp = getTimestamp.replaceAll("[\\s/:]","");//Get timestamp
-            backupDB();
-            renameFile();
-            myView4.clearMyTimestamp();
+
+    private void displaySearchResults(String search) {
+        searchResults.clear();
+        search = editSearch.getText().toString();
+        Log.i("search", "search is: " + search);
+        for (String info: notesInfoRecords) {
+//            info = info.replaceAll("[\\s]", "");
+            if(info.toLowerCase().contains(search)) {
+                Log.i("info", "info is: " + info);
+                searchResults.add(info);
+            }
+        }
+        Log.i("displaySearchResults", "displaySearchResults is: " + searchResults);
+
+
+        notesListView = findViewById(R.id.notesListView);
+        adapter = new ArrayAdapter<String>(this, R.layout.simplerow, searchResults);
+        notesListView.setAdapter(adapter);
+        notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Toast.makeText(getApplicationContext(), "Note Position " + position, Toast.LENGTH_SHORT).show();//Important: This shows the position of the note
+                Log.i("Note Position ", "Note Position is " + position);
+                notePosition.clear();
+                notePosition.add(position);
+                Log.i("Note Position ", "Note Position is " + notePosition);
+
+                Intent myIntent1 = new Intent(View3.this,
+                        View5.class);
+                startActivity(myIntent1);
+
+                Log.i("arraySize", "arraySize is " + notePosition.size());
+                Log.i("onItemClick", "GOING TO View5.java -> 'Editing view'.");
+                localClearA();
+
+            }
         });
-
-        btnNewNote.setOnClickListener(v -> {
-            Intent myIntent1 = new Intent(View3.this,
-                    View4.class);
-            startActivity(myIntent1);
-        });
-
-        btnRestore.setOnClickListener(v -> {
-            restoreDB();
-        });
-
 
 
     }
 
 
+
     void localClearA() {
-        editFilter.setText("");
-        filter = "";
+        editSearch.setText("");
+        mySearch = "";
         notesCount.clear();
         tags.clear();
         info.clear();
@@ -169,7 +215,7 @@ public class View3 extends AppCompatActivity {
 
     private void readingTagsAndInfoTables() {
         try {
-            db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + FILE_EXTENSION, MODE_PRIVATE, null); //Querying the latest database
+            db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + userID + FILE_EXTENSION, MODE_PRIVATE, null); //Querying the latest database
 
             Cursor c1 = db.rawQuery("SELECT * FROM notesInfo", null);
             int tagsIndex = c1.getColumnIndex("tags");
@@ -200,7 +246,7 @@ public class View3 extends AppCompatActivity {
         if (!databaseExists) {
             try {
                 sdcardPathFolder.mkdirs();
-                db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + FILE_EXTENSION, MODE_PRIVATE, null);
+                db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + userID + FILE_EXTENSION, MODE_PRIVATE, null);
 //                db.execSQL("CREATE TABLE notesInfo (tags TEXT, timestamp TEXT, topic TEXT, info TEXT)");
                 db.execSQL("CREATE TABLE IF NOT EXISTS notesInfo (tags TEXT, timestamp TEXT PRIMARY KEY, topic TEXT, info TEXT)");
                 db.close();
@@ -209,8 +255,9 @@ public class View3 extends AppCompatActivity {
 //                Toast.makeText(getApplicationContext(), "Table and schema created successfully!", Toast.LENGTH_LONG).show();
                 myView4.getMyTimestamp();
                 String getTimestamp = myView4.getMyTimestamp().get(0);
-                Log.i("getTimestamp", "getTimestamp is "+ getTimestamp);
-                timestamp = getTimestamp.replaceAll("[\\s/:]","");
+                Log.i("getTimestamp", "getTimestamp is " + getTimestamp);
+                Log.i("backup", "Backup successful!");
+                timestamp = getTimestamp.replaceAll("[\\s/:]", "");
                 myView4.clearMyTimestamp();
             } catch (Exception e) {
                 //TODO
@@ -262,7 +309,7 @@ public class View3 extends AppCompatActivity {
         //checks if lastbackup is existing
         //checks what number of lastbackup
         try {
-            copyFile(createPath, "eclnotesDB.db", backupPath);
+            copyFile(createPath, "eclnotesDB" + userID + ".db", backupPath);
             Toast.makeText(this, "Backup successful!", Toast.LENGTH_LONG).show();
         } catch (Exception e1) {
             //TODO
@@ -273,7 +320,7 @@ public class View3 extends AppCompatActivity {
     private void restoreDB() {
         //File uploading
         try {
-            copyFile(restorePath, "eclnotesDB.db", createPath);
+            copyFile(restorePath, "eclnotesDB" + userID + ".db", createPath);
         } catch (Exception e) {
             Toast.makeText(this, "File not found. Nothing to Restore!", Toast.LENGTH_LONG).show();
         }
@@ -323,12 +370,50 @@ public class View3 extends AppCompatActivity {
 
 
     private void renameFile() {
-        String newBackupFile = "/" + "a_paradise_soft" + "/" + "backup" + "/" + appName + "/" + "eclnotesDB_" + timestamp + ".db";
+        String newBackupFile = "/" + "a_paradise_soft" + "/" + "backup" + "/" + appName + "/" + "eclnotesDB" + userID + "_" + timestamp;//Path of backup database
         File oldfile = new File(Environment.getExternalStorageDirectory(), backupFile);
-        File newfile = new File (Environment.getExternalStorageDirectory(), newBackupFile);
+        File newfile = new File(Environment.getExternalStorageDirectory(), newBackupFile);
         oldfile.renameTo(newfile);
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent setIntent = new Intent(Intent.ACTION_MAIN);
+        setIntent.addCategory(Intent.CATEGORY_HOME);
+        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(setIntent);
+    }
+
+
+    @SuppressLint("NonConstantResourceId")
+    public void onClickMethod(View v) throws IOException {//Purpose: Independent method for button click. Needs android: onClick = "method"
+
+        switch (v.getId()) {
+            case R.id.btnBackup:
+                myView4.getMyTimestamp();
+                String getTimestamp = myView4.getMyTimestamp().get(0);
+                Log.i("getTimestamp", "getTimestamp is " + getTimestamp);
+                timestamp = getTimestamp.replaceAll("[\\s/:]", "");//Get timestamp
+                backupDB();
+                renameFile();
+                myView4.clearMyTimestamp();
+                break;
+
+            case R.id.btnNewNote:
+                Intent myIntent1 = new Intent(View3.this,
+                        View4.class);
+                startActivity(myIntent1);
+                break;
+
+            case R.id.btnRestore:
+                restoreDB();
+                break;
+
+        }
+
+
+
+    }
 
 }

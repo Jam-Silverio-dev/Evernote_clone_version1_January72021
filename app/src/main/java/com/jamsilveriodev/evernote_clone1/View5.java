@@ -222,4 +222,13 @@ public class View5 extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Log.d("CDA", "onBackPressed Called");
+        Intent myIntent1 = new Intent(View5.this,
+                View3.class);
+        startActivity(myIntent1);
+    }
+
+
 }

@@ -9,32 +9,58 @@
     android:orientation="vertical"
     tools:context=".View3">
 
-
-    <EditText
-        android:id="@+id/editFilter"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginHorizontal="20dp"
-        android:background="@drawable/edit_text_border"
-        android:ems="10"
-        android:hint="Tags only"
-        android:includeFontPadding="true"
-        android:paddingLeft="15dp"
+    <LinearLayout
+        android:id="@+id/searchLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayoutA"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints,UselessParent">
 
+        <EditText
+            android:id="@+id/editSearch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/edit_text_border"
+            android:ems="10"
+            android:hint="Search anything.."
+            android:includeFontPadding="true"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="100dp"
+            android:text="Search"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayoutA"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/linearLayoutB"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editFilter"
+        app:layout_constraintTop_toBottomOf="@+id/searchLayout"
         tools:ignore="MissingConstraints,UselessParent">
 
         <ScrollView
@@ -59,7 +85,6 @@
 
         </ScrollView>
 
-
     </LinearLayout>
 
     <LinearLayout
@@ -71,6 +96,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutA"
         tools:ignore="MissingConstraints,UselessParent">
 
         <!--    Buttons-->
@@ -80,6 +106,7 @@
             android:layout_width="125dp"
             android:layout_height="match_parent"
             android:background="#3F74E0"
+            android:onClick="onClickMethod"
             android:text="Backup"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -96,6 +123,7 @@
             android:layout_width="125dp"
             android:layout_height="match_parent"
             android:background="#06B326"
+            android:onClick="onClickMethod"
             android:text="New"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -112,13 +140,14 @@
             android:layout_width="125dp"
             android:layout_height="match_parent"
             android:background="#3F74E0"
+            android:onClick="onClickMethod"
             android:text="Restore"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="20sp"
             tools:ignore="MissingConstraints" />
 
-
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
