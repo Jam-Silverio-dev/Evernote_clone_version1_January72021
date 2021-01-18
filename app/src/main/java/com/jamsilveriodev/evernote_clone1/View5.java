@@ -74,7 +74,7 @@ public class View5 extends AppCompatActivity {
 
         editTextTags2.requestFocus();
 
-        Log.i("notePosition","notePosition is " + notePosition);
+        Log.i("notePosition", "notePosition is " + notePosition);
         readingUsersInfoTable();
         setContent(notePosition);
     }
@@ -138,8 +138,8 @@ public class View5 extends AppCompatActivity {
             textTopic2 = editTextTopic2.getText().toString();
             textInfo2 = editTextInfo2.getText().toString();
 
-            String q ="'";
-            String updateSql = "UPDATE notesInfo SET tags = " + q+textTags2+q + ", " + "topic = " + q+textTopic2+q + ", " + "info = " + q+textInfo2+q + "WHERE timestamp =  " + q+timestamp.get(notePosition)+q;//Timestamp is the primary key and the where clause
+            String q = "'";
+            String updateSql = "UPDATE notesInfo SET tags = " + q + textTags2 + q + ", " + "topic = " + q + textTopic2 + q + ", " + "info = " + q + textInfo2 + q + "WHERE timestamp =  " + q + timestamp.get(notePosition) + q;//Timestamp is the primary key and the where clause
             db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + FILE_EXTENSION, MODE_PRIVATE, null);
             db.execSQL(updateSql);
             db.close();
@@ -206,9 +206,9 @@ public class View5 extends AppCompatActivity {
     private void deleteNoteRecord() {
 
         try {
-            String q ="'";
+            String q = "'";
 //            String deleteSql = DELETE FROM notesInfo WHERE timestamp = 'timestamp1';
-            String deleteSql = "DELETE FROM notesInfo WHERE timestamp = " + q+timestamp.get(notePosition)+q;//Timestamp is the primary key and the where clause
+            String deleteSql = "DELETE FROM notesInfo WHERE timestamp = " + q + timestamp.get(notePosition) + q;//Timestamp is the primary key and the where clause
             db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + FILE_EXTENSION, MODE_PRIVATE, null);
             db.execSQL(deleteSql);
             db.close();

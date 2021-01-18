@@ -24,14 +24,18 @@ public class View4 extends AppCompatActivity {
     /*
     These are global variables
      */
+    public static final String userID = "001";
     ArrayList<String> myTimestamp = new ArrayList<>();
+
     public ArrayList<String> getMyTimestamp() {
         getDate();
         return (ArrayList<String>) myTimestamp.clone();
     }
+
     public void clearMyTimestamp() {
         myTimestamp.clear();
     }
+
     SQLiteDatabase db;
     private static final String FILE_EXTENSION = ".db";
     public static final String appFolder = "com.jamsilveriodev.eclnotes";
@@ -73,6 +77,9 @@ public class View4 extends AppCompatActivity {
 
         editTextTags1.requestFocus();
 
+        getDate();
+        setTimestamp();
+
         btnCancelNote.setOnClickListener(v -> {
             try {
                 Intent myIntent1 = new Intent(View4.this,
@@ -85,14 +92,8 @@ public class View4 extends AppCompatActivity {
 
         });
 
-        btnCreateNote.setOnClickListener(v -> insertRecord());
+        btnCreateNote.setOnClickListener(v -> insertRecord());//insertRecord()
 
-        try {
-            getDate();
-            setTimestamp();
-        } catch (Exception e) {
-            //TODO
-        }
 
     }
 
@@ -106,7 +107,7 @@ public class View4 extends AppCompatActivity {
             String q = "'";
             String insertSql1 = "INSERT INTO notesInfo (tags, timestamp, topic, info) VALUES (" + q + textTags1 + q + ", " + q + timestamp + q + ", " + q + textTopic1 + q + ", " + q + textInfo1 + q + ");";
 
-            db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + FILE_EXTENSION, MODE_PRIVATE, null);
+            db = getApplicationContext().openOrCreateDatabase(sdcardPathFolder + "/" + "eclnotesDB" + userID + FILE_EXTENSION, MODE_PRIVATE, null);
             db.execSQL(insertSql1);
             db.close();
             Log.i("insertRecord(): ", "Log1 from try: Successfully saved your info!");
@@ -119,6 +120,7 @@ public class View4 extends AppCompatActivity {
             Log.i("insertRecord(): ", "Intent: GOING BACK TO View3.java -> HOME!");
         } catch (Exception e3) {
             Log.i("insertRecord(): ", "TODO");
+            Toast.makeText(getApplicationContext(), "Unsuccessful", Toast.LENGTH_SHORT).show();
         }
 
 

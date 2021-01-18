@@ -107,28 +107,8 @@ public class View3 extends AppCompatActivity {
         createDBAndTableIfNotExists();
         readingTagsAndInfoTables();
         insertIntoNotesInfoRecords();
-
-
         displayAllResults();
-//        editSearch.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                // Fires right as the text is being changed (even supplies the range of text)
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count,
-//                                          int after) {
-//                // Fires right before text is changing
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                // Fires right after the text has changed
-////                tvDisplay.setText(s.toString());
-//            }
-//        });
+
 
         btnSearch.setOnClickListener(v -> {
             displaySearchResults(mySearch);
@@ -166,9 +146,9 @@ public class View3 extends AppCompatActivity {
         searchResults.clear();
         search = editSearch.getText().toString();
         Log.i("search", "search is: " + search);
-        for (String info: notesInfoRecords) {
+        for (String info : notesInfoRecords) {
 //            info = info.replaceAll("[\\s]", "");
-            if(info.toLowerCase().contains(search)) {
+            if (info.toLowerCase().contains(search)) {
                 Log.i("info", "info is: " + info);
                 searchResults.add(info);
             }
@@ -201,7 +181,6 @@ public class View3 extends AppCompatActivity {
 
 
     }
-
 
 
     void localClearA() {
@@ -370,7 +349,7 @@ public class View3 extends AppCompatActivity {
 
 
     private void renameFile() {
-        String newBackupFile = "/" + "a_paradise_soft" + "/" + "backup" + "/" + appName + "/" + "eclnotesDB" + userID + "_" + timestamp;//Path of backup database
+        String newBackupFile = "/" + "a_paradise_soft" + "/" + "backup" + "/" + appName + "/" + "eclnotesDB" + userID + "_" + timestamp;//Path of backup database//No file extension
         File oldfile = new File(Environment.getExternalStorageDirectory(), backupFile);
         File newfile = new File(Environment.getExternalStorageDirectory(), newBackupFile);
         oldfile.renameTo(newfile);
@@ -411,7 +390,6 @@ public class View3 extends AppCompatActivity {
                 break;
 
         }
-
 
 
     }
